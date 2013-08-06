@@ -1,7 +1,7 @@
 <?php
 /****
 	*	@name		SEPA Incasso class
-	*	@version	1.1 (08-07-2013)
+	*	@version	1.1 (06-08-2013)
 	*	@author		Mark Hameetman <mark@bureaupartners.nl> / Rein Schaap <info@reinschaap.nl>
 	*	@copyright	2013 BureauPartners B.V.
 	*	@link		https://www.bureaupartners.nl/2013/07/sepa-incasso-open-source-php-class/
