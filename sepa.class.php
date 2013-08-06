@@ -9,11 +9,11 @@
 
 class SEPA {
 	
-	private $sXML						=	NULL;
-	private $iDate						=	NULL;
-	private $aCollection				=	array();
-	private $iSum						=	0.00;
-	private $iCurrency					=	'EUR';
+	private $sXML				=	NULL;
+	private $iDate				=	NULL;
+	private $aCollection			=	array();
+	private $iSum				=	0.00;
+	private $iCurrency			=	'EUR';
 	private $aCollectionDestination		=	array();
 	
 	public function __construct(){
@@ -23,11 +23,11 @@ class SEPA {
 	
 	public function setCollectionDestination($sName, $sIBAN, $sBIC, $sCREDITOR){
 		$this->aCollectionDestination	=	array(
-											'name'			=>	$sName,
-											'iban'			=>	$sIBAN,
-											'bic'			=>	$sBIC,
-											'creditorid'		=>	$sCREDITOR
-										);
+								'name'		=>	$sName,
+								'iban'		=>	$sIBAN,
+								'bic'		=>	$sBIC,
+								'creditorid'	=>	$sCREDITOR
+								);
 	}
 	
 	public function setDate($sDate){
@@ -37,20 +37,19 @@ class SEPA {
 	public function addCollection($sName, $sIBAN, $sBIC, $iAmount, $sDescription, $sSignedDate, $sMandateID){
 		$iAmount = number_format($iAmount, 2, '.', '');
 		$this->iSum += $iAmount;
-		$this->aCollection[] = array(
-										'name'			=>	$sName,
-										'iban'			=>	$sIBAN,
-										'bic'			=>	$sBIC,
-										'amount'		=> 	$iAmount,
-										'descr'			=>	$sDescription,
-										'mandateid'		=>	$sMandateID,
-										'endtoendid'		=>	$sMandateID,
-										'signDate'		=>	strtotime($sSignedDate)
-							);
+		$this->aCollection[] = array(										'name'			=>	$sName,
+						'iban'		=>	$sIBAN,
+						'bic'		=>	$sBIC,
+						'amount'	=> 	$iAmount,
+						'descr'		=>	$sDescription,
+						'mandateid'	=>	$sMandateID,
+						'endtoendid'	=>	$sMandateID,
+						'signDate'	=>	strtotime($sSignedDate)
+						);
 	}
 	
 	private function addGroupHeader(){
-		$this->sXML .= '<GrpHdr><MsgId>'.time().'</MsgId><CreDtTm>'.date(DATE_ATOM).'</CreDtTm><BtchBookg>true</BtchBookg><NbOfTxs>'.count($this->aCollection).'</NbOfTxs><CtrlSum>'.number_format($this->iSum, 2, '.', '').'</CtrlSum><InitgPty><Nm>'.$this->aCollectionDestination['name'].'</Nm></InitgPty></GrpHdr><PmtInf><PmtInfId>'.time().'</PmtInfId><PmtMtd>DD</PmtMtd><NbOfTxs>'.count($this->aCollection).'</NbOfTxs><CtrlSum>'.number_format($this->iSum, 2, '.', '').'</CtrlSum><PmtTpInf><SvcLvl><Cd>SEPA</Cd></SvcLvl><LclInstrm><Cd>CORE</Cd></LclInstrm><SeqTp>FRST</SeqTp></PmtTpInf><ReqdColltnDt>'.date('Y-m-d', $this->iDate).'</ReqdColltnDt><Cdtr><Nm>'.$this->aCollectionDestination['name'].'</Nm></Cdtr><CdtrAcct><Id><IBAN>'.$this->aCollectionDestination['iban'].'</IBAN></Id></CdtrAcct><CdtrAgt><FinInstnId><BIC>'.$this->aCollectionDestination['bic'].'</BIC></FinInstnId></CdtrAgt><ChrgBr>SLEV</ChrgBr><CdtrSchmeId><Id><PrvtId><Othr><Id>'.$this->aCollectionDestination['creditorid'].'</Id><SchmeNm><Prtry>SEPA</Prtry></SchmeNm></Othr></PrvtId></Id></CdtrSchmeId>';
+		$this->sXML .= '<GrpHdr><MsgId>'.time().'</MsgId><CreDtTm>'.date(DATE_ATOM).'</CreDtTm><NbOfTxs>'.count($this->aCollection).'</NbOfTxs><CtrlSum>'.number_format($this->iSum, 2, '.', '').'</CtrlSum><InitgPty><Nm>'.$this->aCollectionDestination['name'].'</Nm></InitgPty></GrpHdr><PmtInf><PmtInfId>'.time().'</PmtInfId><PmtMtd>DD</PmtMtd><NbOfTxs>'.count($this->aCollection).'</NbOfTxs><CtrlSum>'.number_format($this->iSum, 2, '.', '').'</CtrlSum><PmtTpInf><SvcLvl><Cd>SEPA</Cd></SvcLvl><LclInstrm><Cd>CORE</Cd></LclInstrm><SeqTp>FRST</SeqTp></PmtTpInf><ReqdColltnDt>'.date('Y-m-d', $this->iDate).'</ReqdColltnDt><Cdtr><Nm>'.$this->aCollectionDestination['name'].'</Nm></Cdtr><CdtrAcct><Id><IBAN>'.$this->aCollectionDestination['iban'].'</IBAN></Id></CdtrAcct><CdtrAgt><FinInstnId><BIC>'.$this->aCollectionDestination['bic'].'</BIC></FinInstnId></CdtrAgt><ChrgBr>SLEV</ChrgBr><CdtrSchmeId><Id><PrvtId><Othr><Id>'.$this->aCollectionDestination['creditorid'].'</Id><SchmeNm><Prtry>SEPA</Prtry></SchmeNm></Othr></PrvtId></Id></CdtrSchmeId>';
 	}
 	
 	private function addCollections(){
